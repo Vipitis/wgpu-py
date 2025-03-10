@@ -1701,7 +1701,7 @@ class GPUDevice(classes.GPUDevice, GPUObjectBase):
                             value=to_c_string_view("gl_VertexIndex"),
                         )
                     )
-                # note, GLSL is a wgpu-native feature and still uses the older structure!
+                # note, GLSL is a wgpu-core feature and still uses the older structure!
                 # H: chain: WGPUChainedStruct, stage: WGPUShaderStage/int, code: WGPUStringView, defineCount: int, defines: WGPUShaderDefine *
                 source_struct = new_struct_p(
                     "WGPUShaderModuleGLSLDescriptor *",
@@ -2519,6 +2519,7 @@ class GPUTexture(classes.GPUTexture, GPUObjectBase):
         label: str = "",
         format: enums.TextureFormat = optional,
         dimension: enums.TextureViewDimension = optional,
+        usage: flags.TextureUsage = optional,
         aspect: enums.TextureAspect = "all",
         base_mip_level: int = 0,
         mip_level_count: int = optional,
@@ -2545,6 +2546,9 @@ class GPUTexture(classes.GPUTexture, GPUObjectBase):
                 array_layer_count = 6
             elif dimension in ("2d-array", "cube-array"):
                 array_layer_count = self._tex_info["size"][2] - base_array_layer
+        if not usage:
+            #TODO: bad workaround... needs to inherit but handle storage_texture and srgb in a special manner.
+            usage = 0
 
         # H: nextInChain: WGPUChainedStruct *, label: WGPUStringView, format: WGPUTextureFormat, dimension: WGPUTextureViewDimension, baseMipLevel: int, mipLevelCount: int, baseArrayLayer: int, arrayLayerCount: int, aspect: WGPUTextureAspect, usage: WGPUTextureUsage/int
         struct = new_struct_p(
@@ -2552,13 +2556,13 @@ class GPUTexture(classes.GPUTexture, GPUObjectBase):
             label=to_c_label(label),
             format=format,
             dimension=dimension,
+            # usage=usage,
             aspect=aspect,
             baseMipLevel=base_mip_level,
             mipLevelCount=mip_level_count,
             baseArrayLayer=base_array_layer,
             arrayLayerCount=array_layer_count,
             # not used: nextInChain
-            # not used: usage
         )
 
         # H: WGPUTextureView f(WGPUTexture texture, WGPUTextureViewDescriptor const * descriptor)
