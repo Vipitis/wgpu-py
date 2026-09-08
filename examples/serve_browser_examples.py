@@ -43,12 +43,13 @@ compute_examples = {
     "pygfx_example.py": [*pygfx_deps, "sniffio", "imageio", "imgui-bundle"], # currnetly hangs... so I digging down on that
     "fpl_example.py": [*pygfx_deps, "fastplotlib"], #also hangs but I eventually want to get to this.
     "triangle.py": [], # no deps
+    "cube.py": ["numpy"],
 }
 
 # these need rendercanvas too for now. but might run with just a canvas (no events) in the near future.
 graphics_examples = {
     # "triangle.py":[], # no deps
-    "cube.py": ["numpy"],
+    # "cube.py": ["numpy"], # currently pyscript doesn't have pyodide 314.0.6
     "offscreen_hdr.py": ["numpy", "pypng"], # pyscript says it doesn't work in pyodide.
     # "triangle_glsl.py": # we can't use GLSL in the browser... I am looking into maybe using wasm compiled naga manually - at a later date.
     "imgui_backend_sea.py": ["numpy", "imgui-bundle"],
@@ -135,7 +136,7 @@ pyodide_compute_template = """
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>{example_script} via Pyodide</title>
-    <script src="https://cdn.jsdelivr.net/pyodide/v314.0.4/full/pyodide.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v314.0.6/full/pyodide.js"></script>
 </head>
 
 <body>

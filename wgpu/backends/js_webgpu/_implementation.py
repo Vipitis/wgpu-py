@@ -15,12 +15,12 @@ class GPUPromise(classes.GPUPromise):
     # should loop be globally the webloop? or will rendercanvas give us that in the future?
 
     # should this replace sync_wait or _sync_wait? because the resolve logic in the Awaitable might be needed?
-    def sync_wait(self):
+    def _sync_wait(self):
         # pyodide way that hopefully works?
         # explanation: https://blog.pyodide.org/posts/jspi/
         # print("waiting for promise", self)
         # if we set a promise._set_error we should maybe get this?
-        self.catch(lambda err: print(f"promise {self} rejected with error: {err}"))
+        # self.catch(lambda err: print(f"promise {self} rejected with error: {err}"))
         result = run_sync(self)
         # print(f"resolved into {result}")
         return result
