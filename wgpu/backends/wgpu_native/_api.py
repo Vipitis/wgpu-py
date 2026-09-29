@@ -1222,7 +1222,7 @@ class GPUAdapter(classes.GPUAdapter):
 
         for key in dir(c_required_limits):
             snake_key = to_snake_case(key, "-")
-            # Skip the  pointers
+            # Skip the pointers
             if snake_key in (
                 "next-in-chain",
                 "max-non-sampler-bindings",
@@ -1244,6 +1244,7 @@ class GPUAdapter(classes.GPUAdapter):
             maxNonSamplerBindings=required_limits.get(
                 "max-non-sampler-bindings", self._limits["max-non-sampler-bindings"]
             ),
+            maxBuffersAndAccelerationStructuresPerShaderStage=required_limits.get("max-buffers-and-acceleration-structures-per-shader-stage", self._limits["max-buffers-and-acceleration-structures-per-shader-stage"])
             # not used: chain
             # not used: maxBindingArrayElementsPerShaderStage
             # not used: maxBindingArraySamplerElementsPerShaderStage
