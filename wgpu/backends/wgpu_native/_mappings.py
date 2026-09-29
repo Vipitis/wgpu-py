@@ -275,9 +275,11 @@ enummap = {
     "VertexStepMode.vertex": 1,
 }
 
-# There are 49 struct-field enum mappings
+# There are 52 struct-field enum mappings
 
 cstructfield2enum = {
+    "BlasTriangleGeometrySizeDescriptor.indexFormat": "IndexFormat",
+    "BlasTriangleGeometrySizeDescriptor.vertexFormat": "VertexFormat",
     "BlendComponent.dstFactor": "BlendFactor",
     "BlendComponent.operation": "BlendOperation",
     "BlendComponent.srcFactor": "BlendFactor",
@@ -316,6 +318,7 @@ cstructfield2enum = {
     "StorageTextureBindingLayout.format": "TextureFormat",
     "StorageTextureBindingLayout.viewDimension": "TextureViewDimension",
     "SurfaceConfiguration.format": "TextureFormat",
+    "SurfaceFormatCapabilities.format": "TextureFormat",
     "TexelCopyTextureInfo.aspect": "TextureAspect",
     "TextureBindingLayout.sampleType": "TextureSampleType",
     "TextureBindingLayout.viewDimension": "TextureViewDimension",
@@ -378,12 +381,21 @@ enum_str2int = {
         "shader-float32-atomic": 196647,
         "texture-atomic": 196648,
         "texture-format-p010": 196649,
+        "external-texture": 196650,
         "pipeline-cache": 196651,
         "shader-int64-atomic-min-max": 196652,
         "shader-int64-atomic-all-ops": 196653,
+        "vulkan-google-display-timing": 196654,
+        "vulkan-external-memory-win32": 196655,
         "texture-int64-atomic": 196656,
+        "experimental-mesh-shader": 196658,
+        "experimental-ray-hit-vertex-return": 196659,
+        "experimental-mesh-shader-multiview": 196660,
+        "extended-acceleration-structure-vertex-formats": 196661,
+        "passthrough-shaders": 196662,
         "shader-barycentrics": 196663,
         "selective-multiview": 196664,
+        "experimental-mesh-shader-points": 196665,
         "multisample-array": 196666,
         "cooperative-matrix": 196667,
         "shader-per-vertex": 196668,
@@ -391,6 +403,9 @@ enum_str2int = {
         "acceleration-structure-binding-array": 196670,
         "memory-decoration-coherent": 196671,
         "memory-decoration-volatile": 196672,
+        "vulkan-external-memory-fd": 196673,
+        "vulkan-external-memory-dma-buf": 196674,
+        "experimental-ray-tracing-pipelines": 196675,
     },
     "PipelineStatisticName": {
         "vertex-shader-invocations": 0,
@@ -593,6 +608,7 @@ native_flags = {
     "InstanceFlag.GPUBasedValidation": 16,
     "InstanceFlag.ValidationIndirectCall": 32,
     "InstanceFlag.AutomaticTimestampNormalization": 64,
+    "InstanceFlag.StrictWebgpuCompliance": 128,
     "InstanceFlag.Default": 16777216,
     "InstanceFlag.Debugging": 33554432,
     "InstanceFlag.AdvancedDebugging": 67108864,

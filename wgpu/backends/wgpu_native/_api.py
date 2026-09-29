@@ -323,7 +323,7 @@ def _get_limits(id: int, device: bool = False, adapter: bool = False):
     """Gets the limits for a device or an adapter"""
     assert device + adapter == 1  # exactly one is set
 
-    # H: chain: WGPUChainedStruct, maxNonSamplerBindings: int, maxBindingArrayElementsPerShaderStage: int, maxBindingArraySamplerElementsPerShaderStage: int, maxMultiviewViewCount: int
+    # H: chain: WGPUChainedStruct, maxNonSamplerBindings: int, maxBindingArrayElementsPerShaderStage: int, maxBindingArraySamplerElementsPerShaderStage: int, maxMultiviewViewCount: int, maxBindingArrayAccelerationStructureElementsPerShaderStage: int, maxTaskWorkgroupTotalCount: int, maxTaskWorkgroupsPerDimension: int, maxMeshWorkgroupTotalCount: int, maxMeshWorkgroupsPerDimension: int, maxTaskInvocationsPerWorkgroup: int, maxTaskInvocationsPerDimension: int, maxMeshInvocationsPerWorkgroup: int, maxMeshInvocationsPerDimension: int, maxTaskPayloadSize: int, maxMeshOutputVertices: int, maxMeshOutputPrimitives: int, maxMeshOutputLayers: int, maxMeshMultiviewViewCount: int, maxBlasPrimitiveCount: int, maxBlasGeometryCount: int, maxTlasInstanceCount: int, maxAccelerationStructuresPerShaderStage: int, maxBuffersAndAccelerationStructuresPerShaderStage: int, maxRayDispatchCount: int, maxRayRecursionDepth: int
     c_limits_native = new_struct(
         "WGPUNativeLimits",
         # H: next: WGPUChainedStruct *, sType: WGPUSType
@@ -336,6 +336,27 @@ def _get_limits(id: int, device: bool = False, adapter: bool = False):
         # not used: maxBindingArrayElementsPerShaderStage
         # not used: maxBindingArraySamplerElementsPerShaderStage
         # not used: maxMultiviewViewCount
+        # not used: maxBindingArrayAccelerationStructureElementsPerShaderStage
+        # not used: maxTaskWorkgroupTotalCount
+        # not used: maxTaskWorkgroupsPerDimension
+        # not used: maxMeshWorkgroupTotalCount
+        # not used: maxMeshWorkgroupsPerDimension
+        # not used: maxTaskInvocationsPerWorkgroup
+        # not used: maxTaskInvocationsPerDimension
+        # not used: maxMeshInvocationsPerWorkgroup
+        # not used: maxMeshInvocationsPerDimension
+        # not used: maxTaskPayloadSize
+        # not used: maxMeshOutputVertices
+        # not used: maxMeshOutputPrimitives
+        # not used: maxMeshOutputLayers
+        # not used: maxMeshMultiviewViewCount
+        # not used: maxBlasPrimitiveCount
+        # not used: maxBlasGeometryCount
+        # not used: maxTlasInstanceCount
+        # not used: maxAccelerationStructuresPerShaderStage
+        # not used: maxBuffersAndAccelerationStructuresPerShaderStage
+        # not used: maxRayDispatchCount
+        # not used: maxRayRecursionDepth
     )
 
     # Note that the object returned by ffi.cast() does not own the memory, so we must keep a ref to the uncast object, until wgpu-native has consumed it.
@@ -1217,7 +1238,7 @@ class GPUAdapter(classes.GPUAdapter):
 
         # TODO: handle new native limits, or find a programmatic solution for it
         #  the native only limits are passed in via the next-in-chain struct
-        # H: chain: WGPUChainedStruct, maxNonSamplerBindings: int, maxBindingArrayElementsPerShaderStage: int, maxBindingArraySamplerElementsPerShaderStage: int, maxMultiviewViewCount: int
+        # H: chain: WGPUChainedStruct, maxNonSamplerBindings: int, maxBindingArrayElementsPerShaderStage: int, maxBindingArraySamplerElementsPerShaderStage: int, maxMultiviewViewCount: int, maxBindingArrayAccelerationStructureElementsPerShaderStage: int, maxTaskWorkgroupTotalCount: int, maxTaskWorkgroupsPerDimension: int, maxMeshWorkgroupTotalCount: int, maxMeshWorkgroupsPerDimension: int, maxTaskInvocationsPerWorkgroup: int, maxTaskInvocationsPerDimension: int, maxMeshInvocationsPerWorkgroup: int, maxMeshInvocationsPerDimension: int, maxTaskPayloadSize: int, maxMeshOutputVertices: int, maxMeshOutputPrimitives: int, maxMeshOutputLayers: int, maxMeshMultiviewViewCount: int, maxBlasPrimitiveCount: int, maxBlasGeometryCount: int, maxTlasInstanceCount: int, maxAccelerationStructuresPerShaderStage: int, maxBuffersAndAccelerationStructuresPerShaderStage: int, maxRayDispatchCount: int, maxRayRecursionDepth: int
         c_required_limits_native = new_struct_p(
             "WGPUNativeLimits *",
             maxNonSamplerBindings=required_limits.get(
@@ -1227,6 +1248,27 @@ class GPUAdapter(classes.GPUAdapter):
             # not used: maxBindingArrayElementsPerShaderStage
             # not used: maxBindingArraySamplerElementsPerShaderStage
             # not used: maxMultiviewViewCount
+            # not used: maxBindingArrayAccelerationStructureElementsPerShaderStage
+            # not used: maxTaskWorkgroupTotalCount
+            # not used: maxTaskWorkgroupsPerDimension
+            # not used: maxMeshWorkgroupTotalCount
+            # not used: maxMeshWorkgroupsPerDimension
+            # not used: maxTaskInvocationsPerWorkgroup
+            # not used: maxTaskInvocationsPerDimension
+            # not used: maxMeshInvocationsPerWorkgroup
+            # not used: maxMeshInvocationsPerDimension
+            # not used: maxTaskPayloadSize
+            # not used: maxMeshOutputVertices
+            # not used: maxMeshOutputPrimitives
+            # not used: maxMeshOutputLayers
+            # not used: maxMeshMultiviewViewCount
+            # not used: maxBlasPrimitiveCount
+            # not used: maxBlasGeometryCount
+            # not used: maxTlasInstanceCount
+            # not used: maxAccelerationStructuresPerShaderStage
+            # not used: maxBuffersAndAccelerationStructuresPerShaderStage
+            # not used: maxRayDispatchCount
+            # not used: maxRayRecursionDepth
         )
         c_required_limits_native.chain.next = ffi.NULL
         c_required_limits_native.chain.sType = lib.WGPUSType_NativeLimits
@@ -1250,11 +1292,14 @@ class GPUAdapter(classes.GPUAdapter):
         # TODO: is this supported anymore?
         c_trace_path = to_c_string_view(trace_path if trace_path else None)
 
-        # H: chain: WGPUChainedStruct, tracePath: WGPUStringView
+        # H: chain: WGPUChainedStruct, tracePath: WGPUStringView, memoryHints: WGPUMemoryHints, suballocatedDeviceMemoryBlockSizeStart: int, suballocatedDeviceMemoryBlockSizeEnd: int
         c_device_extras = new_struct_p(
             "WGPUDeviceExtras *",
             tracePath=c_trace_path,
             # not used: chain
+            # not used: memoryHints
+            # not used: suballocatedDeviceMemoryBlockSizeStart
+            # not used: suballocatedDeviceMemoryBlockSizeEnd
         )
         c_device_extras.chain.sType = lib.WGPUSType_DeviceExtras
 
@@ -1413,7 +1458,7 @@ class GPUDevice(classes.GPUDevice, GPUObjectBase):
 
         def poll_func(block):
             # This function has no direct nor indirect refs to the device object; avoid circular loops
-            # H: WGPUBool f(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex const *submissionIndex)
+            # H: WGPUNativePollStatus f(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex const *submissionIndex, uint64_t timeout_ns)
             libf.wgpuDevicePoll(internal, block, ffi.NULL)
 
         self._poller = PollThread(poll_func)
@@ -1422,12 +1467,12 @@ class GPUDevice(classes.GPUDevice, GPUObjectBase):
     def _poll(self, block=False):
         # Internal function
         if self._internal:
-            # H: WGPUBool f(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex const *submissionIndex)
+            # H: WGPUNativePollStatus f(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex const *submissionIndex, uint64_t timeout_ns)
             libf.wgpuDevicePoll(self._internal, block, ffi.NULL)
 
     def _poll_wait(self):
         if self._internal:
-            # H: WGPUBool f(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex const *submissionIndex)
+            # H: WGPUNativePollStatus f(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex const *submissionIndex, uint64_t timeout_ns)
             libf.wgpuDevicePoll(self._internal, True, ffi.NULL)
 
     def create_buffer(
@@ -3749,7 +3794,7 @@ class GPURenderPassEncoder(
     def _multi_draw_indirect_count(
         self, buffer, offset, count_buffer, count_buffer_offset, max_count
     ):
-        # H: void f(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, WGPUBuffer count_buffer, uint64_t count_buffer_offset, uint32_t max_count)
+        # H: void f(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, WGPUBuffer countBuffer, uint64_t countBufferOffset, uint32_t maxCount)
         libf.wgpuRenderPassEncoderMultiDrawIndirectCount(
             self._internal,
             buffer._internal,
@@ -3762,7 +3807,7 @@ class GPURenderPassEncoder(
     def _multi_draw_indexed_indirect_count(
         self, buffer, offset, count_buffer, count_buffer_offset, max_count
     ):
-        # H: void f(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, WGPUBuffer count_buffer, uint64_t count_buffer_offset, uint32_t max_count)
+        # H: void f(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64_t offset, WGPUBuffer countBuffer, uint64_t countBufferOffset, uint32_t maxCount)
         libf.wgpuRenderPassEncoderMultiDrawIndexedIndirectCount(
             self._internal,
             buffer._internal,
