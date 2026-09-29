@@ -182,7 +182,6 @@ class HParser:
                 name = parts[-1]
                 assert name.startswith("WGPU")
                 name = name[4:]
-                assert not name.endswith("Flags"), "XxxxFlags should not longer exist"
                 assert name not in self.enums, "flags used to look like enums"
                 self.flags[name] = {}
 
@@ -200,7 +199,7 @@ class HParser:
                 # Check / normalize flag_name
                 assert flag_name.startswith("WGPU")
                 flag_name = flag_name[4:]
-                assert flag_name in self.flags
+                assert flag_name in self.flags, f"{flag_name=} not in {self.flags=}"
                 # Check / normalize flag_key
                 assert flag_key.startswith(f"WGPU{flag_name}_")
                 flag_key = flag_key.partition("_")[2].strip()
@@ -279,6 +278,12 @@ class HParser:
                         # typename = ffi.getctype(typename)
                         if typename.startswith("WGPU"):
                             val = typename  # Enum or struct
+                        # elif field.type.kind == "primitive":
+                            # or use field.cname directly?
+                        elif field.type.kind == "array":
+                            # assume it's an array of primitives now?
+                            key += f"[{field.type.length}]" # do we want it like this or do a list?
+                            val = field.type.item.cname
                         else:
                             val = type(getattr(s, key)).__name__
                         struct[key] = val
@@ -287,7 +292,7 @@ class HParser:
                         self.structs[name] = struct
                     else:
                         ori_struct = self.structs[name]
-                        assert set(struct) == set(ori_struct)
+                        assert set(struct) == set(ori_struct), f"differences in {set(struct)} and {set(ori_struct)}"
                         for key, val in struct.items():
                             if ori_struct[key] != val:
                                 if val.startswith("_"):  # _CDataBase
