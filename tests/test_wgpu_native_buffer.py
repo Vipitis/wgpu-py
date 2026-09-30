@@ -31,13 +31,13 @@ def test_buffer_init1():
     buf = device.create_buffer_with_data(data=data1, usage=wgpu.BufferUsage.MAP_READ)
 
     wgpu.backends.wgpu_native._api.libf.wgpuDevicePoll(
-        buf._device._internal, True, wgpu.backends.wgpu_native.ffi.NULL
+        buf._device._internal, True, wgpu.backends.wgpu_native.ffi.NULL, 0
     )
 
     # Download from buffer to CPU
     buf.map_sync(wgpu.MapMode.READ)
     wgpu.backends.wgpu_native._api.libf.wgpuDevicePoll(
-        buf._device._internal, True, wgpu.backends.wgpu_native.ffi.NULL
+        buf._device._internal, True, wgpu.backends.wgpu_native.ffi.NULL, 0
     )
 
     data2 = buf.read_mapped()

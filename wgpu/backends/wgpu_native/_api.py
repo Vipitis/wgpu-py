@@ -1457,24 +1457,24 @@ class GPUDevice(classes.GPUDevice, GPUObjectBase):
 
         internal = self._internal  # just an int
 
-        def poll_func(block):
+        def poll_func(block:bool, timeout_ns=0):
             # This function has no direct nor indirect refs to the device object; avoid circular loops
             # H: WGPUNativePollStatus f(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex const *submissionIndex, uint64_t timeout_ns)
-            libf.wgpuDevicePoll(internal, block, ffi.NULL)
+            libf.wgpuDevicePoll(internal, block, ffi.NULL, timeout_ns)
 
         self._poller = PollThread(poll_func)
         self._poller.start()
 
-    def _poll(self, block=False):
+    def _poll(self, block:bool=False, timeout_ns:int=0):
         # Internal function
         if self._internal:
             # H: WGPUNativePollStatus f(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex const *submissionIndex, uint64_t timeout_ns)
-            libf.wgpuDevicePoll(self._internal, block, ffi.NULL)
+            libf.wgpuDevicePoll(self._internal, block, ffi.NULL, timeout_ns)
 
     def _poll_wait(self):
         if self._internal:
             # H: WGPUNativePollStatus f(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex const *submissionIndex, uint64_t timeout_ns)
-            libf.wgpuDevicePoll(self._internal, True, ffi.NULL)
+            libf.wgpuDevicePoll(self._internal, True, ffi.NULL, 0)
 
     def create_buffer(
         self,
